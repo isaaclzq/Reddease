@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">reddease</string>
+
+    <string name="internal_error">Some Error Occurred!</string>
 </resources>
