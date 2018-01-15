@@ -19,14 +19,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void setUp() {
-        setContentView(R.layout.activity_main);
         setUnBinder(ButterKnife.bind(this));
-        decideActivity();
-    }
-
-    private void decideActivity() {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 }
