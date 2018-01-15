@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    public void setmUnBinder(Unbinder unBinder) {
+    public void setUnBinder(Unbinder unBinder) {
         mUnBinder = unBinder;
     }
 
