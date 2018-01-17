@@ -20,8 +20,8 @@ import timber.log.Timber;
 
 public class ReddeaseApplication extends Application {
 
-    public static Context get(Context context) {
-        return (ReddeaseApplication) context;
+    public static ReddeaseApplication get(Context context) {
+        return (ReddeaseApplication) context.getApplicationContext();
     }
 
     private Retrofit oauthRetrofit;

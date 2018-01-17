@@ -23,4 +23,9 @@ public class OauthParams {
 
     @SerializedName(OauthPrefs.SCOPE)
     public String scope;
+
+    @Override
+    public String toString() {
+        return String.format("access_token = %s, refresh_token = %s", accessToken, refreshToken);
+    }
 }
