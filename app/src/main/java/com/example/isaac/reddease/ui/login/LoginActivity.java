@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.isaac.reddease.R;
 import com.example.isaac.reddease.ReddeaseApplication;
 import com.example.isaac.reddease.data.network.api.OauthApi;
+import com.example.isaac.reddease.data.prefs.OauthPrefs.OauthPrefs;
 import com.example.isaac.reddease.ui.base.BaseActivity;
 import com.example.isaac.reddease.ui.oauth.OauthActivity;
 import com.example.isaac.reddease.ui.oauth.OauthParams;
@@ -42,6 +43,22 @@ public class LoginActivity extends BaseActivity {
     protected void setUp() {
         setContentView(R.layout.login_activity);
         setUnBinder(ButterKnife.bind(this));
+
+        OauthPrefs oauthPrefs = new OauthPrefs(LoginActivity.this);
+
+        if (oauthPrefs.isLoggedIn()) {
+            if (oauthPrefs.isExpired()) {
+                refreshToken();
+            } else {
+                mOauthInfo.setText(oauthPrefs.toString());
+            }
+        } else {
+            onClick();
+        }
+    }
+
+    private void refreshToken() {
+
     }
 
     @OnClick(R.id.login_btn)
@@ -84,6 +101,8 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(OauthParams oauthParams) {
+                        OauthPrefs oauthPrefs = new OauthPrefs(LoginActivity.this);
+                        oauthPrefs.updateOauthInfo(oauthParams);
                         mOauthInfo.setText(oauthParams.toString());
                     }
 

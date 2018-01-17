@@ -3,6 +3,8 @@ package com.example.isaac.reddease.data.prefs.OauthPrefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.isaac.reddease.ui.oauth.OauthParams;
+
 /**
  * Created by Isaac on 1/14/2018.
  */
@@ -24,9 +26,45 @@ public class OauthPrefs implements IOauthPrefs {
         mOauthSharedPrefs = context.getSharedPreferences(OauthPrefs.OAUTHPREFS_KEY, Context.MODE_PRIVATE);
     }
 
+    public void updateOauthInfo(OauthParams params) {
+        if (params.accessToken != null) {
+            setAccessToken(params.accessToken);
+        }
+
+        if (params.refreshToken != null) {
+            setRefreshToken(params.refreshToken);
+        }
+
+        if (params.scope != null) {
+            setRefreshToken(params.scope);
+        }
+
+        if (params.expiration != null) {
+            long epochNow = System.currentTimeMillis() / 1000;
+            long epochExpiration = epochNow + Long.parseLong(params.expiration);
+            setRefreshToken(Long.toString(epochExpiration));
+        }
+
+        if (params.tokenType != null) {
+            setTokenType(params.tokenType);
+        }
+    }
+
     @Override
-    public Boolean isLoggedIn() {
+    public boolean isLoggedIn() {
         return getAccessToken() != null && getRefreshToken() != null;
+    }
+
+    @Override
+    public boolean isExpired() {
+        long epochNow = System.currentTimeMillis() / 1000;
+        String expirationString = getExpiration();
+        long expiration = 0;
+        if (expirationString != null) {
+            expiration = Long.parseLong(expirationString);
+            return epochNow > expiration;
+        }
+        return true;
     }
 
     @Override

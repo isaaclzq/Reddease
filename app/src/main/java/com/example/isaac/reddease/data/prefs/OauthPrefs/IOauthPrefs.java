@@ -26,7 +26,9 @@ public interface IOauthPrefs {
     void setScope(String scope);
     String getScope();
 
-    Boolean isLoggedIn();
+    boolean isLoggedIn();
+
+    boolean isExpired();
 
     void clearAll();
 }
