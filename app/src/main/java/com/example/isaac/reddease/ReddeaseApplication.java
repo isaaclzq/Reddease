@@ -45,6 +45,8 @@ public class ReddeaseApplication extends Application {
             }
         });
 
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();

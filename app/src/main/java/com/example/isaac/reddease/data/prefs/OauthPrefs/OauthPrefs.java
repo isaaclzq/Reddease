@@ -36,13 +36,13 @@ public class OauthPrefs implements IOauthPrefs {
         }
 
         if (params.scope != null) {
-            setRefreshToken(params.scope);
+            setScope(params.scope);
         }
 
         if (params.expiration != null) {
             long epochNow = System.currentTimeMillis() / 1000;
             long epochExpiration = epochNow + Long.parseLong(params.expiration);
-            setRefreshToken(Long.toString(epochExpiration));
+            setExpiration(Long.toString(epochExpiration));
         }
 
         if (params.tokenType != null) {

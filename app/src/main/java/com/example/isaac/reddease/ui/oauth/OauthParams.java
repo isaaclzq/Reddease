@@ -26,6 +26,6 @@ public class OauthParams {
 
     @Override
     public String toString() {
-        return String.format("access_token = %s, refresh_token = %s", accessToken, refreshToken);
+        return accessToken;
     }
 }

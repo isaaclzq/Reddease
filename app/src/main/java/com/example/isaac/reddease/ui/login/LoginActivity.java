@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.isaac.reddease.R;
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseActivity {
     public static final int OAUTH_REQ = 1;
 
     @BindView(R.id.oauth_info)
-    TextView mOauthInfo;
+    EditText mOauthInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class LoginActivity extends BaseActivity {
 
         if (oauthPrefs.isLoggedIn()) {
             if (oauthPrefs.isExpired()) {
+                mOauthInfo.setText("Token expired!");
                 refreshToken();
             } else {
                 mOauthInfo.setText(oauthPrefs.toString());
@@ -58,7 +60,34 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void refreshToken() {
+        String authString = OauthApi.CLIENT_ID + ":";
+        String encodedAuthString = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
+        OauthApi oauthApi = ReddeaseApplication.get(this).getOauthRetrofit().create(OauthApi.class);
+        oauthApi.refreshAccessToken("Basic " +encodedAuthString,
+                "Sample App","refresh_token", new OauthPrefs(LoginActivity.this).getRefreshToken())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<OauthParams>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(OauthParams params) {
+
+                        Timber.i(params.toString());
+                        mOauthInfo.setText("refresh successfully: " + params.toString());
+
+                        new OauthPrefs(LoginActivity.this).updateOauthInfo(params);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+                    }
+                });
     }
 
     @OnClick(R.id.login_btn)
